@@ -29,23 +29,28 @@ export async function POST(request: Request) {
       day: "2-digit",
     });
 
-    // Append row to "Leads" tab
+    // Build notes from form answers
+    const notes = `Struggle: ${biggestStruggle} | Invested before: ${investedBefore} | Why today: ${whyToday}`;
+
+    // Columns: A=Name, B=Email, C=Phone, D=Date Entered, E=Source, F=Lead Score, G-J=blank (Call Scheduled, Call Date, Call Outcome, Follow-Up Date), K=Notes
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: "Leads!A:I",
+      range: "Leads!A:K",
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [
           [
-            today,               // Date
-            fullName,            // Full Name
-            email,               // Email
-            phone,               // Phone
-            biggestStruggle,     // Biggest Struggle
-            investedBefore,      // Invested Before
-            whyToday,            // Why Today
-            "enrollment page",   // Source
-            3,                   // Lead Score
+            fullName,            // A - Name
+            email,               // B - Email
+            phone,               // C - Phone
+            today,               // D - Date Entered
+            "enrollment page",   // E - Source
+            3,                   // F - Lead Score (1-3)
+            "",                  // G - Call Scheduled (Y/N)
+            "",                  // H - Call Date
+            "",                  // I - Call Outcome
+            "",                  // J - Follow-Up Date
+            notes,               // K - Notes
           ],
         ],
       },
