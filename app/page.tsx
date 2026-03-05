@@ -1,65 +1,199 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+// ── UPDATE THIS NUMBER TO CHANGE SPOTS REMAINING ──
+const SPOTS_REMAINING = 4;
+// ────────────────────────────────────────────────────
+
+export default function EnrollmentPage() {
+  const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    biggestStruggle: "",
+    investedBefore: "",
+    whyToday: "",
+  });
+
+  function update(field: string, value: string) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      const res = await fetch("/api/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) throw new Error("Submit failed");
+      router.push("/thank-you");
+    } catch {
+      alert("Something went wrong. Please try again.");
+      setSubmitting(false);
+    }
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main className="min-h-screen bg-[#0A0A0A] px-4 py-12 sm:py-20">
+      <div className="mx-auto max-w-lg">
+        {/* Logo */}
+        <div className="mb-10 text-center">
+          <h1 className="text-5xl font-bold tracking-[0.3em] text-white sm:text-6xl">
+            RIVEN
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <div className="mx-auto mt-3 h-px w-16 bg-[#C8A951]" />
+        </div>
+
+        {/* Spot Counter */}
+        <p className="mb-10 text-center text-sm font-semibold tracking-wide text-[#C8A951] sm:text-base">
+          {SPOTS_REMAINING} of 4 spots remaining — Q2 2026
+        </p>
+
+        {/* Coaching Description */}
+        <div className="mb-12 rounded-xl border border-[#2A2A2A] bg-[#141414] p-6 sm:p-8">
+          <p className="text-center text-base leading-relaxed text-white/90 sm:text-lg">
+            12 weeks. Daily check-ins. Personalized meal plans. Restaurant guide
+            app included. <span className="font-semibold text-[#C8A951]">20 lb guarantee.</span>
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        {/* Application Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Full Name */}
+          <div>
+            <label htmlFor="fullName" className="mb-1.5 block text-sm font-medium text-white/70">
+              Full Name
+            </label>
+            <input
+              id="fullName"
+              type="text"
+              required
+              value={form.fullName}
+              onChange={(e) => update("fullName", e.target.value)}
+              className="w-full rounded-lg border border-[#2A2A2A] bg-[#1A1A1A] px-4 py-3 text-white placeholder-white/30 outline-none transition-colors focus:border-[#C8A951]"
+              placeholder="Your full name"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </div>
+
+          {/* Email */}
+          <div>
+            <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-white/70">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              required
+              value={form.email}
+              onChange={(e) => update("email", e.target.value)}
+              className="w-full rounded-lg border border-[#2A2A2A] bg-[#1A1A1A] px-4 py-3 text-white placeholder-white/30 outline-none transition-colors focus:border-[#C8A951]"
+              placeholder="you@email.com"
+            />
+          </div>
+
+          {/* Phone */}
+          <div>
+            <label htmlFor="phone" className="mb-1.5 block text-sm font-medium text-white/70">
+              Phone
+            </label>
+            <input
+              id="phone"
+              type="tel"
+              required
+              value={form.phone}
+              onChange={(e) => update("phone", e.target.value)}
+              className="w-full rounded-lg border border-[#2A2A2A] bg-[#1A1A1A] px-4 py-3 text-white placeholder-white/30 outline-none transition-colors focus:border-[#C8A951]"
+              placeholder="(555) 123-4567"
+            />
+          </div>
+
+          {/* Biggest Struggle */}
+          <div>
+            <label htmlFor="biggestStruggle" className="mb-1.5 block text-sm font-medium text-white/70">
+              What&apos;s your biggest struggle with food right now?
+            </label>
+            <textarea
+              id="biggestStruggle"
+              required
+              rows={3}
+              value={form.biggestStruggle}
+              onChange={(e) => update("biggestStruggle", e.target.value)}
+              className="w-full resize-none rounded-lg border border-[#2A2A2A] bg-[#1A1A1A] px-4 py-3 text-white placeholder-white/30 outline-none transition-colors focus:border-[#C8A951]"
+              placeholder="Tell us what's been holding you back..."
+            />
+          </div>
+
+          {/* Invested Before */}
+          <div>
+            <label className="mb-2 block text-sm font-medium text-white/70">
+              Have you invested in a nutrition program before?
+            </label>
+            <div className="flex gap-4">
+              <button
+                type="button"
+                onClick={() => update("investedBefore", "Yes")}
+                className={`flex-1 rounded-lg border px-4 py-3 text-sm font-medium transition-colors ${
+                  form.investedBefore === "Yes"
+                    ? "border-[#C8A951] bg-[#C8A951]/10 text-[#C8A951]"
+                    : "border-[#2A2A2A] bg-[#1A1A1A] text-white/50 hover:border-white/20"
+                }`}
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+                onClick={() => update("investedBefore", "No")}
+                className={`flex-1 rounded-lg border px-4 py-3 text-sm font-medium transition-colors ${
+                  form.investedBefore === "No"
+                    ? "border-[#C8A951] bg-[#C8A951]/10 text-[#C8A951]"
+                    : "border-[#2A2A2A] bg-[#1A1A1A] text-white/50 hover:border-white/20"
+                }`}
+              >
+                No
+              </button>
+            </div>
+          </div>
+
+          {/* Why Today */}
+          <div>
+            <label htmlFor="whyToday" className="mb-1.5 block text-sm font-medium text-white/70">
+              What made you look into this today?
+            </label>
+            <textarea
+              id="whyToday"
+              required
+              rows={3}
+              value={form.whyToday}
+              onChange={(e) => update("whyToday", e.target.value)}
+              className="w-full resize-none rounded-lg border border-[#2A2A2A] bg-[#1A1A1A] px-4 py-3 text-white placeholder-white/30 outline-none transition-colors focus:border-[#C8A951]"
+              placeholder="What's motivating you right now..."
+            />
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={submitting || !form.investedBefore}
+            className="mt-4 w-full rounded-lg bg-[#C8A951] py-4 text-base font-bold tracking-wider text-black transition-colors hover:bg-[#A68A3E] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            {submitting ? "SUBMITTING..." : "APPLY NOW"}
+          </button>
+        </form>
+
+        {/* Footer */}
+        <p className="mt-8 text-center text-xs text-white/30">
+          Your information is kept private and never shared.
+        </p>
+      </div>
+    </main>
   );
 }
