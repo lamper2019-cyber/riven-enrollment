@@ -25,3 +25,130 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
+/* ── Fade-in on scroll ── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.7s ease-out both;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.35s; }
+.delay-4 { animation-delay: 0.5s; }
+.delay-5 { animation-delay: 0.65s; }
+
+/* ── Gold shimmer on logo ── */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.logo-shimmer {
+  background: linear-gradient(
+    90deg,
+    #FFFFFF 0%,
+    #FFFFFF 40%,
+    #C8A951 50%,
+    #FFFFFF 60%,
+    #FFFFFF 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+/* ── Subtle pulse on spot counter ── */
+@keyframes softPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.pulse-gold {
+  animation: softPulse 3s ease-in-out infinite;
+}
+
+/* ── Gold line expand ── */
+@keyframes lineExpand {
+  from { width: 0; }
+  to { width: 64px; }
+}
+
+.animate-line {
+  animation: lineExpand 0.8s ease-out 0.3s both;
+}
+
+/* ── Glow effect on submit button ── */
+@keyframes goldGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(200, 169, 81, 0.15); }
+  50% { box-shadow: 0 0 35px rgba(200, 169, 81, 0.35); }
+}
+
+.btn-glow {
+  animation: goldGlow 2.5s ease-in-out infinite;
+}
+
+.btn-glow:hover {
+  box-shadow: 0 0 40px rgba(200, 169, 81, 0.5);
+}
+
+/* ── Thank you checkmark draw ── */
+@keyframes drawCheck {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+
+.check-draw {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  animation: drawCheck 0.6s ease-out 0.4s both;
+}
+
+/* ── Circle scale in ── */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out 0.2s both;
+}
+
+/* ── Ambient glow background ── */
+@keyframes ambientFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.08; }
+  33% { transform: translate(30px, -20px) scale(1.1); opacity: 0.12; }
+  66% { transform: translate(-20px, 15px) scale(0.95); opacity: 0.06; }
+}
+
+.ambient-orb {
+  position: fixed;
+  border-radius: 50%;
+  background: radial-gradient(circle, #C8A951 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(80px);
+  animation: ambientFloat 12s ease-in-out infinite;
+}
+
+/* ── Input focus ring ── */
+input:focus, textarea:focus {
+  box-shadow: 0 0 0 1px rgba(200, 169, 81, 0.3), 0 0 12px rgba(200, 169, 81, 0.08);
+}
